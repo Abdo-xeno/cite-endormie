@@ -14,12 +14,18 @@ export default function Teaser() {
     <section id="teaser" className="relative px-6 py-32">
       <div className="mx-auto max-w-4xl text-center">
         <Reveal>
-          <SectionLabel>Le teaser</SectionLabel>
+          <SectionLabel>La bande-annonce</SectionLabel>
         </Reveal>
         <Reveal delay={0.1}>
-          <h2 className="mb-12 mt-6 font-display text-4xl font-bold text-cream md:text-5xl">
-            Ressentez-le
+          <h2 className="mb-5 mt-6 font-display text-4xl font-bold text-cream md:text-5xl">
+            Maintenant, voyez-le prendre vie.
           </h2>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-cream/55">
+            Vous avez traversé la cité endormie. Voici l'escape game qui en
+            naîtra — un avant-goût de l'expérience à vivre.
+          </p>
         </Reveal>
 
         <Reveal delay={0.2}>
@@ -47,7 +53,7 @@ export default function Teaser() {
                 Lancer la séquence
               </p>
               <p className="mt-2 text-xs text-cream/40">
-                ~ 25 s · cinématique d'ouverture
+                ~ 40 s · cinématique de clôture
               </p>
             </div>
           </button>

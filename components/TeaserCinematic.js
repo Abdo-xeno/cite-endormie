@@ -10,15 +10,20 @@ import CityScene from "./CityScene";
  * défiler, les sceaux qui se fissurent, l'aube) ; le texte n'est qu'une
  * légende. 100% en code, aucun fichier.
  */
+// Cinématique de CLÔTURE (la page finit ici). Deux mouvements : un RAPPEL bref
+// de l'aventure (cité → vol → éveil → sceaux brisés → aube), puis l'OUVERTURE
+// vers la suite (« 1re épreuve réussie… mais ce n'est que le début » → le monde
+// qui dort encore → d'autres sceaux → Chapitre I + dua). Volontairement > 30 s.
 const STEPS = [
-  { scene: "intro", cap: "Quelque part, une cité s'est endormie.", d: 4200 },
-  { scene: "sleep", cap: "Personne n'est enchaîné.", sub: "Pourtant, personne ne se lève.", d: 4200 },
-  { scene: "theft", cap: "Pendant qu'ils regardent ailleurs,", sub: "on les dépouille.", d: 4800 },
-  { scene: "phone", cap: "Jusqu'à ce qu'une main", sub: "s'arrête de défiler.", d: 5000 },
-  { scene: "awaken", cap: "Un seul s'éveille.", d: 3800 },
-  { scene: "seals", cap: "Trois sceaux. Trois illusions.", sub: "Douze minutes pour réveiller la cité.", d: 5200 },
-  { scene: "dawn", cap: "Et la cité se réveille.", d: 4200 },
-  { scene: "title", cap: "LA CITÉ ENDORMIE", sub: "Réveillerez-vous la cité ?", final: true, d: 0 },
+  { scene: "intro", cap: "Une cité s'est endormie…", sub: "les yeux ouverts.", d: 3800 },
+  { scene: "theft", cap: "On l'a dépouillée dans son sommeil.", d: 3800 },
+  { scene: "awaken", cap: "Jusqu'à ce qu'un seul s'éveille…", d: 3600 },
+  { scene: "seals", cap: "Trois sceaux brisés.", sub: "Par une équipe : la vôtre.", d: 4400 },
+  { scene: "dawn", cap: "Et la cité s'est réveillée.", d: 3800 },
+  { scene: "dawn", cap: "Vous avez réussi la première épreuve.", sub: "Mais ceci n'est que le commencement.", d: 4600 },
+  { scene: "world", cap: "Au-delà de ses murs, le monde dort encore.", sub: "Mille cités. Un seul flambeau.", d: 4800 },
+  { scene: "world", cap: "D'autres sceaux vous attendent.", sub: "D'autres illusions, d'autres vérités.", d: 4400 },
+  { scene: "title", cap: "LA CITÉ ENDORMIE", sub: "Chapitre I · Réveillerez-vous le monde ?", final: true, d: 0 },
 ];
 
 function PhoneScene() {
@@ -145,6 +150,51 @@ function SealsScene() {
   );
 }
 
+// Le monde au-delà des murs : une constellation de cités endormies (bleu),
+// une seule éveillée (or). « Mille cités. Un seul flambeau. »
+function WorldScene() {
+  const cities = [...Array(46)].map((_, i) => ({
+    i,
+    x: (i * 67 + 7) % 100,
+    y: (i * 41 + (i % 5) * 13) % 100,
+    awake: i === 22,
+  }));
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 bg-night-deep/75" />
+      <div className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-night-700/20 blur-[100px]" />
+      {cities.map((c) => (
+        <motion.span
+          key={c.i}
+          className="absolute rounded-full"
+          style={{
+            left: `${5 + c.x * 0.9}%`,
+            top: `${8 + c.y * 0.8}%`,
+            width: c.awake ? 11 : 4,
+            height: c.awake ? 11 : 4,
+            background: c.awake ? "#f4c44a" : "rgba(120,165,225,0.5)",
+            boxShadow: c.awake
+              ? "0 0 22px 6px rgba(244,196,74,0.85)"
+              : "0 0 7px rgba(120,165,225,0.5)",
+          }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={
+            c.awake
+              ? { opacity: [0, 1, 1], scale: [0, 1.25, 1] }
+              : { opacity: [0, 0.55, 0.4, 0.55], scale: 1 }
+          }
+          transition={{
+            duration: c.awake ? 2.2 : 3.4,
+            delay: (c.i % 14) * 0.07,
+            repeat: c.awake ? 0 : Infinity,
+            repeatType: "reverse",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function TeaserCinematic({ open, onClose }) {
   const [i, setI] = useState(0);
 
@@ -215,6 +265,7 @@ export default function TeaserCinematic({ open, onClose }) {
             {step.scene === "theft" && <TheftScene />}
             {step.scene === "phone" && <PhoneScene />}
             {step.scene === "seals" && <SealsScene />}
+            {step.scene === "world" && <WorldScene />}
             {step.scene === "awaken" && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
@@ -253,6 +304,18 @@ export default function TeaserCinematic({ open, onClose }) {
                   <p className="mt-5 font-display text-xl text-gold-light md:text-2xl">
                     {step.sub}
                   </p>
+                  {/* Sceau final — le dua, repris de l'ancien épilogue */}
+                  <div className="mx-auto mt-8 max-w-sm border-t border-gold/15 pt-6">
+                    <p className="arabic text-2xl text-sacred-glow">
+                      وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ
+                    </p>
+                    <p className="mt-1.5 text-xs italic text-cream/40">
+                      «&nbsp;Et ma réussite ne dépend que d'Allah&nbsp;»
+                    </p>
+                    <p className="mt-5 text-xs uppercase tracking-[0.3em] text-cream/35">
+                      Un escape game à vivre — bientôt
+                    </p>
+                  </div>
                 </>
               ) : (
                 <>

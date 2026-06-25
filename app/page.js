@@ -49,20 +49,22 @@ export default function Home() {
         />
         <ActeCitoyens />
 
+        {/* Acte III — Le Pacte : CACHÉ pour l'instant (à finaliser). Réactiver en retirant ce commentaire.
         <ActIntro
           num="III"
           title="Le Pacte"
           line="La responsabilité ne se divise pas — elle se co-porte."
         />
         <ActePacte />
+        */}
 
         {/* L'épreuve → la question + sa réponse (adjacentes) → le projet → le cliffhanger */}
         <SceauxV2 />
         <SpiritualV2 />
         <FinaleV2 />
         <Teaser />
-        <Vision />
-        <EpilogueSageV2 />
+        {/* <Vision /> — CACHÉE pour l'instant (à réactiver) */}
+        {/* <EpilogueSageV2 /> — retiré : on finit sur la bande-annonce. La cinématique porte désormais la clôture (« le monde ? » + dua), pas de redondance. */}
       </main>
     </SealsProvider>
   );
