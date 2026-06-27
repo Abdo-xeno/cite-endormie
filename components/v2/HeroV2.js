@@ -124,12 +124,6 @@ export default function HeroV2() {
               Descendre dans la cité
             </span>
           </a>
-          <a
-            href="#teaser"
-            className="no-tap-highlight rounded-full border border-white/20 px-8 py-3.5 text-sm uppercase tracking-widest text-cream/60 transition-all duration-500 hover:border-white/40 hover:text-cream"
-          >
-            Voir le teaser
-          </a>
         </motion.div>
       </motion.div>
 
